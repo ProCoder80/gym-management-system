@@ -1,4 +1,4 @@
-# Titan Fitness — Gym Management System (Design Patterns LA-2)
+# Fitness Gym Management System (Design Patterns LA-2)
 
 A enterprise-grade **Gym Management System** built with **Java 17**, **Spring Boot 3**, **Plain JDBC**, and **SQLite**, specifically developed to demonstrate 5 core Gang of Four (GoF) design patterns with zero ORM overhead.
 
