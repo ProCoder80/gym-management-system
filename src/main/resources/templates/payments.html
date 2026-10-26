@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: html-head('Payments & Financial Records')}"></head>
+<body>
+<div class="app-container">
+    <!-- Sidebar -->
+    <aside th:replace="~{layout/fragments :: sidebar('payments')}"></aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top bar -->
+        <div th:replace="~{layout/fragments :: topbar('Financial Transactions & Fee Records', 'Audit log of all membership fees collected via Strategy patterns')}"></div>
+
+        <!-- Flash alerts -->
+        <div th:replace="~{layout/fragments :: flash-messages}"></div>
+
+        <!-- Revenue Stats Banner -->
+        <div class="stats-grid" style="margin-bottom: 28px;">
+            <div class="stat-card">
+                <div class="stat-icon-wrap icon-rose">💰</div>
+                <div class="stat-info">
+                    <div class="stat-label">Total Revenue Collected</div>
+                    <div class="stat-value" th:text="'$' + ${#numbers.formatDecimal(totalRevenue, 1, 2)}">$0.00</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon-wrap icon-emerald">🧾</div>
+                <div class="stat-info">
+                    <div class="stat-label">Total Transactions</div>
+                    <div class="stat-value" th:text="${#lists.size(payments)}">0</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon-wrap icon-gold">⚡</div>
+                <div class="stat-info">
+                    <div class="stat-label">Average Transaction</div>
+                    <div class="stat-value" 
+                         th:text="${#lists.size(payments) > 0 ? '$' + #numbers.formatDecimal(totalRevenue / #lists.size(payments), 1, 2) : '$0.00'}">$0.00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payments Table Section -->
+        <div class="card-section">
+            <div class="card-header-row">
+                <h2>💳 All Member Payment Records</h2>
+                <a th:href="@{/enroll}" class="btn btn-primary btn-sm">+ Collect New Payment</a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Receipt ID</th>
+                            <th>Member Name</th>
+                            <th>Amount Collected</th>
+                            <th>Calculation Strategy</th>
+                            <th>Transaction Timestamp</th>
+                            <th>Payment Method</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${payments}">
+                            <td style="font-family: monospace; font-weight: 600; color: var(--accent-orange);" th:text="${p.receiptId}">REC-001</td>
+                            <td><strong style="color: #fff;" th:text="${p.memberName}">John Doe</strong></td>
+                            <td><strong style="color: #fff; font-size: 15px;" th:text="'$' + ${#numbers.formatDecimal(p.amount, 1, 2)}">$50.00</strong></td>
+                            <td><span class="badge badge-pill" th:text="${p.feeStrategy}">MonthlyFee</span></td>
+                            <td style="font-size: 13px; color: var(--text-muted);" th:text="${p.paymentDate}">2026-01-10 10:15</td>
+                            <td th:text="${p.paymentMethod}">Credit Card</td>
+                            <td><span class="badge badge-active" th:text="${p.status}">COMPLETED</span></td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(payments)}">
+                            <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 30px;">
+                                No payments recorded yet. Enroll a member to generate your first transaction receipt.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

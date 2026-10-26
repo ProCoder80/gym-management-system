@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: html-head('Dashboard')}"></head>
+<body>
+<div class="app-container">
+    <!-- Sidebar -->
+    <aside th:replace="~{layout/fragments :: sidebar('dashboard')}"></aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top bar -->
+        <div th:replace="~{layout/fragments :: topbar('Titan Fitness Command Center', 'Real-time monitoring of members, classes, revenues, and pattern interactions')}"></div>
+
+        <!-- Flash alerts -->
+        <div th:replace="~{layout/fragments :: flash-messages}"></div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon-wrap icon-orange">👥</div>
+                <div class="stat-info">
+                    <div class="stat-label">Total Members</div>
+                    <div class="stat-value" th:text="${totalMembers}">0</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon-wrap icon-emerald">⚡</div>
+                <div class="stat-info">
+                    <div class="stat-label">Active Plans</div>
+                    <div class="stat-value" th:text="${activeMemberships}">0</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon-wrap icon-gold">🏋️</div>
+                <div class="stat-info">
+                    <div class="stat-label">Gym Classes</div>
+                    <div class="stat-value" th:text="${totalClasses}">0</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon-wrap icon-cyan">🧑‍🏫</div>
+                <div class="stat-info">
+                    <div class="stat-label">Coaches & Trainers</div>
+                    <div class="stat-value" th:text="${totalTrainers}">0</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon-wrap icon-rose">💰</div>
+                <div class="stat-info">
+                    <div class="stat-label">Total Revenue</div>
+                    <div class="stat-value" th:text="'$' + ${#numbers.formatDecimal(totalRevenue, 1, 2)}">$0.00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design Patterns Operational Status Banner -->
+        <div class="card-section" style="background: linear-gradient(135deg, rgba(255, 87, 34, 0.08) 0%, rgba(20, 24, 39, 0.9) 100%); border-color: rgba(255, 87, 34, 0.3);">
+            <div class="card-header-row">
+                <h2>🎯 Active Design Pattern Architectures</h2>
+                <span class="badge badge-pill">GOF PATTERNS IN PRODUCTION</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: var(--radius-md); border-left: 3px solid var(--accent-orange);">
+                    <strong style="color: #fff; font-size: 14px;">1. Builder Pattern</strong>
+                    <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">Membership.Builder with mandatory validation on memberId, planType, startDate & optional add-ons.</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: var(--radius-md); border-left: 3px solid var(--accent-emerald);">
+                    <strong style="color: #fff; font-size: 14px;">2. Strategy Pattern</strong>
+                    <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">FeeStrategy family (Monthly, Yearly, Student, Couple) resolved via Map factory without if/else.</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: var(--radius-md); border-left: 3px solid var(--accent-gold);">
+                    <strong style="color: #fff; font-size: 14px;">3. Template Method</strong>
+                    <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">EnrollmentProcess.run() enforces verifyMember &rarr; collectFee &rarr; activateMembership &rarr; sendWelcome.</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: var(--radius-md); border-left: 3px solid var(--accent-cyan);">
+                    <strong style="color: #fff; font-size: 14px;">4. Mediator Pattern</strong>
+                    <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">GymCoordinator decouples Member, Trainer & Schedule services. Rejects overcapacity or off-duty bookings.</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: var(--radius-md); border-left: 3px solid #ff0080;">
+                    <strong style="color: #fff; font-size: 14px;">5. Memento Pattern</strong>
+                    <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">MemberPlan.Memento captures plan state snapshots in SQLite plan_history with instant Undo rollback.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Class Capacity & Recent Transactions Row -->
+        <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; flex-wrap: wrap;">
+            <!-- Gym Classes Live Status -->
+            <div class="card-section">
+                <div class="card-header-row">
+                    <h2>🏋️ Class Capacities & Schedules</h2>
+                    <a th:href="@{/classes}" class="btn btn-secondary btn-sm">Manage Classes &rarr;</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Coach</th>
+                                <th>Time</th>
+                                <th>Capacity</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="c : ${classes}">
+                                <td><strong th:text="${c.name}">Class Name</strong></td>
+                                <td th:text="${c.trainerName}">Trainer</td>
+                                <td th:text="${c.scheduleTime}">Schedule</td>
+                                <td>
+                                    <span th:text="${c.currentEnrolled} + ' / ' + ${c.capacity}"></span>
+                                </td>
+                                <td>
+                                    <span th:if="${c.full}" class="badge badge-full">FULL</span>
+                                    <span th:unless="${c.full}" class="badge badge-available">AVAILABLE</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Payments -->
+            <div class="card-section">
+                <div class="card-header-row">
+                    <h2>💳 Recent Transactions</h2>
+                    <a th:href="@{/payments}" class="btn btn-secondary btn-sm">All Payments &rarr;</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Member</th>
+                                <th>Amount</th>
+                                <th>Strategy</th>
+                                <th>Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="p : ${recentPayments}">
+                                <td th:text="${p.memberName}">Member</td>
+                                <td><strong th:text="'$' + ${#numbers.formatDecimal(p.amount, 1, 2)}">$0.00</strong></td>
+                                <td><span class="badge badge-pill" th:text="${p.feeStrategy}">Strategy</span></td>
+                                <td style="font-size: 12px; font-family: monospace;" th:text="${p.receiptId}">REC</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Members Quick Actions -->
+        <div class="card-section">
+            <div class="card-header-row">
+                <h2>👥 Member Quick Access</h2>
+                <a th:href="@{/members}" class="btn btn-primary btn-sm">+ Add New Member</a>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Quick Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="m : ${members}">
+                            <td th:text="'#' + ${m.id}">#1</td>
+                            <td><strong th:text="${m.name}">Name</strong></td>
+                            <td th:text="${m.email}">Email</td>
+                            <td th:text="${m.phone}">Phone</td>
+                            <td><span class="badge badge-active" th:text="${m.status}">ACTIVE</span></td>
+                            <td>
+                                <a th:href="@{'/plans/' + ${m.id}}" class="btn btn-secondary btn-sm">📜 Plan & Memento</a>
+                                <a th:href="@{'/enroll?memberId=' + ${m.id}}" class="btn btn-primary btn-sm">⚡ Enroll</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

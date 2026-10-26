@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: html-head('Member Plan & History')}"></head>
+<body>
+<div class="app-container">
+    <!-- Sidebar -->
+    <aside th:replace="~{layout/fragments :: sidebar('members')}"></aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top bar -->
+        <div th:replace="~{layout/fragments :: topbar('Member Plan Management & Memento Stack', 'Upgrade, downgrade, view audit trail, and execute Memento Undo')}"></div>
+
+        <!-- Flash alerts -->
+        <div th:replace="~{layout/fragments :: flash-messages}"></div>
+
+        <!-- Member Header Overview Card -->
+        <div class="card-section" style="background: linear-gradient(135deg, rgba(255, 87, 34, 0.12) 0%, rgba(21, 24, 39, 0.95) 100%);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div class="brand-icon" style="font-size: 26px;">👤</div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <h2 style="font-size: 24px; color: #fff;" th:text="${member.name}">Member Name</h2>
+                            <span class="badge badge-active" th:text="${member.status}">ACTIVE</span>
+                        </div>
+                        <div style="color: var(--text-muted); font-size: 13.5px; margin-top: 4px;">
+                            <span th:text="${member.email}">email@example.com</span> &bull; 
+                            <span th:text="${member.phone}">+1-555-0100</span> &bull;
+                            Joined <span th:text="${member.joinDate}">2026-01-01</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <a th:href="@{/members}" class="btn btn-secondary btn-sm">&larr; Back to Members</a>
+                    <a th:href="@{'/enroll?memberId=' + ${member.id}}" class="btn btn-primary btn-sm">⚡ Re-Enroll / Extend</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Membership Details & Memento Actions Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 28px;">
+            <!-- Current Plan Card -->
+            <div class="card-section">
+                <div class="card-header-row">
+                    <h2>🏷️ Current Active Plan</h2>
+                    <span th:if="${activeMembership != null}" class="badge badge-active">ACTIVE SUBSCRIPTION</span>
+                    <span th:unless="${activeMembership != null}" class="badge badge-pending">NO ACTIVE PLAN</span>
+                </div>
+
+                <div th:if="${activeMembership != null}">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--border-subtle);">
+                        <div>
+                            <span style="font-size: 13px; color: var(--text-muted);">Current Tier:</span>
+                            <div style="font-size: 24px; font-weight: 700; color: #fff;" th:text="${activeMembership.planType}">MONTHLY</div>
+                            <span class="badge badge-pill" th:text="${activeMembership.feeStrategy}">MonthlyFee</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="font-size: 13px; color: var(--text-muted);">Total Rate:</span>
+                            <div style="font-size: 28px; font-weight: 800; color: var(--accent-orange);" 
+                                 th:text="'$' + ${#numbers.formatDecimal(activeMembership.totalFee, 1, 2)}">$0.00</div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13.5px; margin-bottom: 16px;">
+                        <div>
+                            <span style="color: var(--text-muted);">Start Date:</span>
+                            <div style="color: #fff; font-weight: 500;" th:text="${activeMembership.startDate}">2026-01-01</div>
+                        </div>
+                        <div>
+                            <span style="color: var(--text-muted);">Renewal Date:</span>
+                            <div style="color: #fff; font-weight: 500;" th:text="${activeMembership.endDate}">2026-02-01</div>
+                        </div>
+                        <div>
+                            <span style="color: var(--text-muted);">Private Locker:</span>
+                            <div>
+                                <span th:if="${activeMembership.locker}" class="badge badge-active">YES (Assigned)</span>
+                                <span th:unless="${activeMembership.locker}" class="badge" style="background: rgba(255,255,255,0.06); color: var(--text-muted);">NO</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span style="color: var(--text-muted);">Diet Plan Consultation:</span>
+                            <div>
+                                <span th:if="${activeMembership.dietPlan}" class="badge badge-active">YES (Active)</span>
+                                <span th:unless="${activeMembership.dietPlan}" class="badge" style="background: rgba(255,255,255,0.06); color: var(--text-muted);">NO</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="padding: 10px 14px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); font-size: 13px;">
+                        <span style="color: var(--text-muted);">Personal Training Sessions:</span>
+                        <strong style="color: var(--accent-gold); margin-left: 6px;" th:text="${activeMembership.ptSessions} + ' Sessions Booked'">0 Sessions</strong>
+                    </div>
+                </div>
+
+                <div th:unless="${activeMembership != null}" style="padding: 30px; text-align: center; color: var(--text-muted);">
+                    <p style="margin-bottom: 16px;">This member does not currently have an active membership plan.</p>
+                    <a th:href="@{'/enroll?memberId=' + ${member.id}}" class="btn btn-primary">⚡ Enroll Now</a>
+                </div>
+            </div>
+
+            <!-- Memento Actions: Upgrade / Downgrade / Undo -->
+            <div class="card-section">
+                <div class="card-header-row">
+                    <h2>⚙️ Plan Adjustments & Undo</h2>
+                    <span class="badge badge-pill">MEMENTO PATTERN</span>
+                </div>
+
+                <div th:if="${activeMembership != null}">
+                    <!-- Memento Change Form -->
+                    <form th:object="${planChangeForm}" method="post" id="planActionForm">
+                        <input type="hidden" th:field="*{memberId}">
+
+                        <div class="form-group" style="margin-bottom: 14px;">
+                            <label>Target Plan Tier *</label>
+                            <select th:field="*{newPlanType}" class="form-control" required>
+                                <option value="MONTHLY">Monthly ($50.00/mo)</option>
+                                <option value="YEARLY">Yearly ($480.00/yr - 20% Off)</option>
+                                <option value="STUDENT">Student ($35.00/mo)</option>
+                                <option value="COUPLE">Couple ($80.00/mo)</option>
+                            </select>
+                        </div>
+
+                        <div style="display: flex; gap: 14px; margin-bottom: 14px;">
+                            <label class="checkbox-group" style="flex: 1;">
+                                <input type="checkbox" th:field="*{locker}">
+                                <span>Locker</span>
+                            </label>
+                            <label class="checkbox-group" style="flex: 1;">
+                                <input type="checkbox" th:field="*{dietPlan}">
+                                <span>Diet Plan</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label>Personal Training Sessions</label>
+                            <input type="number" th:field="*{ptSessions}" min="0" max="50" class="form-control">
+                        </div>
+
+                        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                            <button type="submit" 
+                                    th:formaction="@{'/plans/' + ${member.id} + '/upgrade'}" 
+                                    class="btn btn-primary" 
+                                    style="flex: 1;">
+                                ⬆️ Upgrade Plan
+                            </button>
+                            <button type="submit" 
+                                    th:formaction="@{'/plans/' + ${member.id} + '/downgrade'}" 
+                                    class="btn btn-secondary" 
+                                    style="flex: 1;">
+                                ⬇️ Downgrade Plan
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- UNDO BUTTON FORM -->
+                    <form th:action="@{'/plans/' + ${member.id} + '/undo'}" method="post">
+                        <button type="submit" class="btn btn-undo" style="width: 100%; padding: 12px;"
+                                th:disabled="${!hasHistoryToUndo}">
+                            ↺ UNDO Last Plan Change (Restore Memento)
+                        </button>
+                        <p style="font-size: 11.5px; color: var(--text-muted); text-align: center; margin-top: 6px;">
+                            Pulls the previous snapshot from SQLite <code>plan_history</code> and restores state.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Memento Plan History Audit Trail -->
+        <div class="card-section">
+            <div class="card-header-row">
+                <h2>📜 Memento State Stack (plan_history Table)</h2>
+                <span class="badge badge-pill" th:text="${#lists.size(historyStack)} + ' Snapshots Persisted'">0 Snapshots</span>
+            </div>
+
+            <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 18px;">
+                Every modification (Enrollment, Upgrade, Downgrade, Undo) serializes a <code>MemberPlan.Memento</code> instance into SQLite, 
+                preserving an immutable audit log and enabling reversible state restoration.
+            </p>
+
+            <div class="timeline" th:if="${not #lists.isEmpty(historyStack)}">
+                <div class="timeline-item" th:each="entry, stat : ${historyStack}">
+                    <div class="timeline-dot" 
+                         th:classappend="${entry.actionType == 'UPGRADE' ? 'dot-upgrade' : (entry.actionType == 'DOWNGRADE' ? 'dot-downgrade' : (entry.actionType == 'UNDO' ? 'dot-undo' : ''))}"></div>
+                    <div class="timeline-content">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                            <div>
+                                <span class="badge" 
+                                      th:classappend="${entry.actionType == 'UNDO' ? 'badge-pill' : (entry.actionType == 'UPGRADE' ? 'badge-active' : 'badge-available')}"
+                                      th:text="${entry.actionType}">ACTION</span>
+                                <strong style="color: #fff; font-size: 15px; margin-left: 8px;" th:text="${entry.planType} + ' Plan'">MONTHLY Plan</strong>
+                                <span th:if="${stat.first}" class="badge badge-active" style="margin-left: 6px;">LATEST CURRENT STATE</span>
+                            </div>
+                            <div style="font-size: 12px; color: var(--text-muted);" th:text="${entry.timestamp}">Timestamp</div>
+                        </div>
+
+                        <div style="display: flex; gap: 16px; font-size: 13px; color: var(--text-muted); flex-wrap: wrap; margin-bottom: 10px;">
+                            <div>Total Fee: <strong style="color: #fff;" th:text="'$' + ${#numbers.formatDecimal(entry.totalFee, 1, 2)}">$0.00</strong></div>
+                            <div>Locker: <strong th:text="${entry.locker ? 'Yes' : 'No'}">No</strong></div>
+                            <div>Diet Plan: <strong th:text="${entry.dietPlan ? 'Yes' : 'No'}">No</strong></div>
+                            <div>PT Sessions: <strong th:text="${entry.ptSessions}">0</strong></div>
+                            <div>Status: <strong th:text="${entry.status}">ACTIVE</strong></div>
+                        </div>
+
+                        <div style="background: rgba(0,0,0,0.4); padding: 8px 12px; border-radius: var(--radius-sm); font-family: monospace; font-size: 11.5px; color: var(--accent-orange); word-break: break-all;">
+                            <strong>Memento Payload:</strong> <span th:text="${entry.mementoData}">{}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${#lists.isEmpty(historyStack)}" style="padding: 24px; text-align: center; color: var(--text-muted);">
+                No plan history recorded yet for this member.
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

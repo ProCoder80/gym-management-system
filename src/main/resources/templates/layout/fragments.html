@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="html-head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' | TITAN Gym Pro'"></title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:src="@{/js/app.js}" defer></script>
+</head>
+<body>
+
+<!-- SIDEBAR FRAGMENT -->
+<aside th:fragment="sidebar(activeTab)" class="sidebar">
+    <div class="brand-wrapper">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+            <div class="brand-title">TITAN GYM</div>
+            <span class="brand-badge">PRO SYSTEM</span>
+        </div>
+    </div>
+
+    <ul class="nav-menu">
+        <li>
+            <a th:href="@{/}" class="nav-link" th:classappend="${activeTab == 'dashboard' ? 'active' : ''}">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/members}" class="nav-link" th:classappend="${activeTab == 'members' ? 'active' : ''}">
+                <span class="nav-icon">👥</span>
+                <span class="nav-text">Members</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/enroll}" class="nav-link" th:classappend="${activeTab == 'enroll' ? 'active' : ''}">
+                <span class="nav-icon">✍️</span>
+                <span class="nav-text">Enroll Member</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/classes}" class="nav-link" th:classappend="${activeTab == 'classes' ? 'active' : ''}">
+                <span class="nav-icon">🏋️</span>
+                <span class="nav-text">Class Schedule</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/payments}" class="nav-link" th:classappend="${activeTab == 'payments' ? 'active' : ''}">
+                <span class="nav-icon">💳</span>
+                <span class="nav-text">Payments & Audits</span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="sidebar-footer">
+        <div class="db-status-card">
+            <div><span class="status-indicator"></span><strong>SQLite Connected</strong></div>
+            <div style="color: var(--text-muted); font-size: 11px; margin-top: 4px;">gym.db &bull; Plain JDBC</div>
+        </div>
+        <div style="font-size: 11px; color: var(--text-subtle); text-align: center;">
+            5 Design Patterns Active
+        </div>
+    </div>
+</aside>
+
+<!-- TOPBAR FRAGMENT -->
+<div th:fragment="topbar(pageTitle, subtitle)" class="top-bar">
+    <div class="page-header">
+        <h1 th:text="${pageTitle}">Dashboard</h1>
+        <p th:text="${subtitle}">Overview of gym metrics and operations</p>
+    </div>
+    <div class="top-bar-actions">
+        <a th:href="@{/enroll}" class="btn btn-primary btn-sm">⚡ + Quick Enroll</a>
+        <a th:href="@{/members}" class="btn btn-secondary btn-sm">👥 All Members</a>
+    </div>
+</div>
+
+<!-- FLASH MESSAGES FRAGMENT -->
+<div th:fragment="flash-messages" class="flash-container">
+    <div th:if="${successMsg}" class="flash-alert flash-success">
+        <span class="flash-icon">✅</span>
+        <span th:text="${successMsg}">Action succeeded!</span>
+    </div>
+    <div th:if="${errorMsg}" class="flash-alert flash-error">
+        <span class="flash-icon">⚠️</span>
+        <span th:text="${errorMsg}">Action rejected!</span>
+    </div>
+</div>
+
+</body>
+</html>

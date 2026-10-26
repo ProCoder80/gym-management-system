@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: html-head('Member Enrollment')}"></head>
+<body>
+<div class="app-container">
+    <!-- Sidebar -->
+    <aside th:replace="~{layout/fragments :: sidebar('enroll')}"></aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top bar -->
+        <div th:replace="~{layout/fragments :: topbar('Membership Enrollment & Plan Activation', 'Execute Builder, Strategy, and Template Method workflows')}"></div>
+
+        <!-- Flash alerts -->
+        <div th:replace="~{layout/fragments :: flash-messages}"></div>
+
+        <!-- Pattern Notice Banner -->
+        <div class="card-section" style="background: rgba(255, 87, 34, 0.05); border: 1px dashed rgba(255, 87, 34, 0.4); margin-bottom: 24px;">
+            <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+                <span style="font-size: 24px;">⚙️</span>
+                <div>
+                    <strong style="color: #fff;">Pattern Workflow Trigger:</strong>
+                    <span style="color: var(--text-muted); font-size: 13.5px;">
+                        Submitting this form triggers <strong>EnrollmentProcess.run()</strong> (Template Method), calculates pricing via 
+                        <strong>FeeStrategy</strong> (Strategy Pattern), constructs the entity via <strong>Membership.Builder</strong> (Builder Pattern), 
+                        and dispatches to <strong>GymMediator</strong> to assign trainers and auto-enroll intro classes!
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; align-items: start;">
+            <!-- Enrollment Form -->
+            <div class="card-section">
+                <div class="card-header-row">
+                    <h2>✍️ Configure Membership</h2>
+                    <span class="badge badge-pill">STEP-BY-STEP</span>
+                </div>
+
+                <form th:action="@{/enroll/submit}" th:object="${enrollmentForm}" method="post">
+                    <input type="hidden" id="selectedStrategyName" th:field="*{strategyName}" value="MonthlyFee">
+
+                    <!-- Member Selection -->
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label>Select Member *</label>
+                        <select th:field="*{memberId}" class="form-control" required>
+                            <option value="">-- Choose Member --</option>
+                            <option th:each="m : ${members}" 
+                                    th:value="${m.id}" 
+                                    th:text="'#' + ${m.id} + ' - ' + ${m.name} + ' (' + ${m.email} + ')'"></option>
+                        </select>
+                    </div>
+
+                    <!-- Enrollment Type (New vs Renewal) -->
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label>Enrollment Workflow Type (Template Method Variant) *</label>
+                        <div style="display: flex; gap: 16px;">
+                            <label class="checkbox-group" style="flex: 1;">
+                                <input type="radio" th:field="*{enrollmentType}" value="NEW" checked>
+                                <div>
+                                    <strong>New Member</strong>
+                                    <div style="font-size: 12px; color: var(--text-muted);">First-time signup with starter kit</div>
+                                </div>
+                            </label>
+                            <label class="checkbox-group" style="flex: 1;">
+                                <input type="radio" th:field="*{enrollmentType}" value="RENEWAL">
+                                <div>
+                                    <strong>Plan Renewal</strong>
+                                    <div style="font-size: 12px; color: var(--accent-emerald);">Includes 5% Loyalty Discount!</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Plan Type Selection (Strategy) -->
+                    <div class="form-grid" style="margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label>Plan Tier (Fee Strategy) *</label>
+                            <select id="enrollPlanType" th:field="*{planType}" class="form-control" required>
+                                <option value="MONTHLY">Monthly ($50.00/mo) - Standard</option>
+                                <option value="YEARLY">Yearly ($480.00/yr) - Save 20%</option>
+                                <option value="STUDENT">Student ($35.00/mo) - 30% Off</option>
+                                <option value="COUPLE">Couple ($80.00/mo) - Dual Pass</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Start Date *</label>
+                            <input type="date" th:field="*{startDate}" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <!-- Dedicated Coach / Trainer Assignment -->
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label>Assign Personal Trainer (Optional - Coordinated by Mediator)</label>
+                        <select th:field="*{trainerId}" class="form-control">
+                            <option value="">-- No Dedicated Trainer --</option>
+                            <option th:each="t : ${trainers}"
+                                    th:value="${t.id}"
+                                    th:text="${t.name} + ' (' + ${t.specialization} + ') - ' + (${t.available} ? 'Available' : 'Unavailable')">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Optional Add-ons (Builder Pattern) -->
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label>Optional Add-Ons (Configured via Membership.Builder)</label>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <label class="checkbox-group">
+                                <input type="checkbox" id="enrollLocker" th:field="*{locker}">
+                                <div>
+                                    <strong>Private Secure Locker Rental</strong>
+                                    <span style="font-size: 12px; color: var(--text-muted); margin-left: 8px;">24/7 keycard access</span>
+                                </div>
+                            </label>
+                            <label class="checkbox-group">
+                                <input type="checkbox" id="enrollDietPlan" th:field="*{dietPlan}">
+                                <div>
+                                    <strong>Custom Nutrition & Diet Consultation</strong>
+                                    <span style="font-size: 12px; color: var(--text-muted); margin-left: 8px;">Weekly meal prep & macro plan</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Personal Training Sessions -->
+                    <div class="form-grid" style="margin-bottom: 24px;">
+                        <div class="form-group">
+                            <label>Personal Training Sessions Count</label>
+                            <input type="number" id="enrollPtSessions" th:field="*{ptSessions}" min="0" max="50" class="form-control" value="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Payment Method</label>
+                            <select th:field="*{paymentMethod}" class="form-control">
+                                <option value="Credit Card">Credit Card / Debit</option>
+                                <option value="Bank Transfer">Bank Wire Transfer</option>
+                                <option value="Cash / POS">Front Desk POS / Cash</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px;">
+                        ⚡ Complete Enrollment & Activate Plan
+                    </button>
+                </form>
+            </div>
+
+            <!-- Live Fee Preview Panel -->
+            <div>
+                <div class="fee-preview-panel">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="color: #fff; font-size: 18px;">💡 Live Fee Preview</h3>
+                        <span class="badge badge-pill" id="prevStrategyName">MonthlyFee</span>
+                    </div>
+
+                    <p id="prevDescription" style="font-size: 13px; color: var(--text-muted);">
+                        Real-time rate calculated using the Strategy Pattern registry.
+                    </p>
+
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                        <div class="fee-breakdown-row">
+                            <span>Base Subscription:</span>
+                            <strong id="prevBaseFee" style="color: #fff;">$50.00</strong>
+                        </div>
+                        <div class="fee-breakdown-row">
+                            <span>Locker Rental Add-on:</span>
+                            <span id="prevLockerFee">$0.00</span>
+                        </div>
+                        <div class="fee-breakdown-row">
+                            <span>Nutrition & Diet Plan:</span>
+                            <span id="prevDietFee">$0.00</span>
+                        </div>
+                        <div class="fee-breakdown-row">
+                            <span>PT Sessions Fee:</span>
+                            <span id="prevPtFee">$0.00</span>
+                        </div>
+                        <div class="fee-breakdown-row" style="color: var(--accent-emerald);">
+                            <span>Loyalty / Special Discount:</span>
+                            <span id="prevDiscount">-$0.00</span>
+                        </div>
+                        <div class="fee-breakdown-row total-row">
+                            <div>
+                                <strong style="color: #fff; font-size: 16px;">Total Fee Due:</strong>
+                                <div style="font-size: 11px; color: var(--text-muted);">Tax inclusive</div>
+                            </div>
+                            <div class="total-amount" id="prevTotalFee">$50.00</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 14px; padding: 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); font-size: 12px; color: var(--text-subtle);">
+                        ℹ️ <strong>Strategy Pattern:</strong> Resolved via <code>FeeStrategyFactory</code> map lookup without conditional branching.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

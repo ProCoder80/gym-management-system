@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: html-head('Gym Classes & Booking')}"></head>
+<body>
+<div class="app-container">
+    <!-- Sidebar -->
+    <aside th:replace="~{layout/fragments :: sidebar('classes')}"></aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top bar -->
+        <div th:replace="~{layout/fragments :: topbar('Gym Class Schedules & Bookings', 'Mediator Pattern coordinating Member, Trainer, and Class bookings')}"></div>
+
+        <!-- Flash alerts (Displays Mediator Rejection or Confirmation) -->
+        <div th:replace="~{layout/fragments :: flash-messages}"></div>
+
+        <!-- Mediator Info Banner -->
+        <div class="card-section" style="background: rgba(0, 229, 255, 0.05); border: 1px dashed rgba(0, 229, 255, 0.4); margin-bottom: 24px;">
+            <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+                <span style="font-size: 26px;">🎛️</span>
+                <div>
+                    <strong style="color: #fff;">Mediator Pattern in Action:</strong>
+                    <span style="color: var(--text-muted); font-size: 13.5px;">
+                        Booking requests are verified and routed through <strong>GymCoordinator</strong>.
+                        Colleagues (<code>MemberService</code>, <code>TrainerService</code>, <code>ClassScheduleService</code>) do not talk directly.
+                        The Mediator enforces: <em>1) Rejection if class is at full capacity</em>, and <em>2) Rejection if assigned trainer is off-duty/unavailable</em>.
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Class Cards Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 32px;">
+            <div th:each="c : ${classes}" class="card-section" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                        <h3 style="font-size: 18px; color: #fff;" th:text="${c.name}">Sunrise Yoga Flow</h3>
+                        <span th:if="${c.full}" class="badge badge-full">CLASS FULL</span>
+                        <span th:unless="${c.full}" class="badge badge-available">
+                            <span th:text="${c.availableSpots} + ' SPOTS LEFT'">SPOTS</span>
+                        </span>
+                    </div>
+
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px; min-height: 40px;" th:text="${c.description}">
+                        Class description here.
+                    </p>
+
+                    <div style="font-size: 13px; display: flex; flex-direction: column; gap: 6px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); margin-bottom: 16px;">
+                        <div>
+                            <span style="color: var(--text-muted);">Schedule:</span> 
+                            <strong style="color: #fff;" th:text="${c.scheduleTime}">Mon 07:00 AM</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="color: var(--text-muted);">Coach:</span>
+                                <strong style="color: #fff;" th:text="${c.trainerName}">Maya Patel</strong>
+                            </div>
+                            <span class="badge" 
+                                  th:classappend="${c.trainerAvailable ? 'badge-active' : 'badge-pending'}"
+                                  th:text="${c.trainerAvailable ? 'Available' : 'Unavailable'}">Status</span>
+                        </div>
+                        <div>
+                            <span style="color: var(--text-muted);">Enrolled:</span>
+                            <strong th:text="${c.currentEnrolled} + ' / ' + ${c.capacity}">12 / 15</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <!-- Quick Toggle Trainer Availability to test Mediator Rejection -->
+                    <form th:action="@{'/classes/trainers/toggle/' + ${c.trainerId}}" method="post" style="flex: 1;">
+                        <button type="submit" class="btn btn-secondary btn-sm" style="width: 100%; font-size: 12px;"
+                                title="Toggle trainer on/off duty to test mediator rejection">
+                            🔄 Toggle Coach
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 28px; align-items: start;">
+            <!-- Book Class Form -->
+            <div class="card-section">
+                <div class="card-header-row">
+                    <h2>🎟️ Book a Class Spot</h2>
+                    <span class="badge badge-pill">MEDIATED</span>
+                </div>
+
+                <form th:action="@{/classes/book}" th:object="${bookingForm}" method="post">
+                    <div class="form-group" style="margin-bottom: 18px;">
+                        <label>Select Member *</label>
+                        <select th:field="*{memberId}" class="form-control" required>
+                            <option value="">-- Choose Member --</option>
+                            <option th:each="m : ${members}" 
+                                    th:value="${m.id}" 
+                                    th:text="'#' + ${m.id} + ' - ' + ${m.name}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 24px;">
+                        <label>Select Gym Class *</label>
+                        <select th:field="*{classId}" class="form-control" required>
+                            <option value="">-- Choose Class --</option>
+                            <option th:each="c : ${classes}" 
+                                    th:value="${c.id}" 
+                                    th:text="${c.name} + ' (' + ${c.currentEnrolled} + '/' + ${c.capacity} + ') - Coach ' + ${c.trainerName} + (${c.full ? ' [FULL]' : ''})"></option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        🎟️ Submit Mediated Booking Request
+                    </button>
+                </form>
+
+                <div style="margin-top: 18px; padding: 12px; background: rgba(255,255,255,0.02); border-radius: var(--radius-sm); font-size: 12px; color: var(--text-muted);">
+                    💡 <em>Tip for Testing:</em> Try booking into <strong>"High-Octane HIIT"</strong> (Full: 12/12) or click <strong>"Toggle Coach"</strong> to set a trainer to unavailable and observe the Mediator rejection banner!
+                </div>
+            </div>
+
+            <!-- Existing Class Bookings Table -->
+            <div class="card-section">
+                <div class="card-header-row">
+                    <h2>📋 Confirmed Class Reservations</h2>
+                    <span class="badge badge-active" th:text="${#lists.size(bookings)} + ' Bookings'">0</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Booking #</th>
+                                <th>Member Name</th>
+                                <th>Class</th>
+                                <th>Date / Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="b : ${bookings}">
+                                <td th:text="'#' + ${b.id}">#1</td>
+                                <td><strong th:text="${b.memberName}">Member</strong></td>
+                                <td th:text="${b.className}">Class Name</td>
+                                <td style="font-size: 12.5px; color: var(--text-muted);" th:text="${b.bookingDate}">Date</td>
+                                <td><span class="badge badge-active" th:text="${b.status}">CONFIRMED</span></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(bookings)}">
+                                <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                                    No reservations recorded yet.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>
