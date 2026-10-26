@@ -41,8 +41,8 @@ class MembershipBuilderTest {
                 .dietPlan(true)
                 .ptSessions(5)
                 .feeStrategy("YearlyFee")
-                .baseFee(480.0)
-                .totalFee(805.0)
+                .baseFee(14400.0)
+                .totalFee(22800.0)
                 .build();
 
         assertNotNull(membership);
@@ -54,8 +54,8 @@ class MembershipBuilderTest {
         assertTrue(membership.isDietPlan());
         assertEquals(5, membership.getPtSessions());
         assertEquals("YearlyFee", membership.getFeeStrategy());
-        assertEquals(480.0, membership.getBaseFee());
-        assertEquals(805.0, membership.getTotalFee());
+        assertEquals(14400.0, membership.getBaseFee());
+        assertEquals(22800.0, membership.getTotalFee());
     }
 
     @Test

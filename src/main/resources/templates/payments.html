@@ -20,7 +20,7 @@
                 <div class="stat-icon-wrap icon-rose">💰</div>
                 <div class="stat-info">
                     <div class="stat-label">Total Revenue Collected</div>
-                    <div class="stat-value" th:text="'$' + ${#numbers.formatDecimal(totalRevenue, 1, 2)}">$0.00</div>
+                    <div class="stat-value" th:text="'₹' + ${#numbers.formatDecimal(totalRevenue, 1, 2)}">₹0.00</div>
                 </div>
             </div>
 
@@ -37,7 +37,7 @@
                 <div class="stat-info">
                     <div class="stat-label">Average Transaction</div>
                     <div class="stat-value" 
-                         th:text="${#lists.size(payments) > 0 ? '$' + #numbers.formatDecimal(totalRevenue / #lists.size(payments), 1, 2) : '$0.00'}">$0.00</div>
+                         th:text="${#lists.size(payments) > 0 ? '₹' + #numbers.formatDecimal(totalRevenue / #lists.size(payments), 1, 2) : '₹0.00'}">₹0.00</div>
                 </div>
             </div>
         </div>
@@ -66,7 +66,7 @@
                         <tr th:each="p : ${payments}">
                             <td style="font-family: monospace; font-weight: 600; color: var(--accent-orange);" th:text="${p.receiptId}">REC-001</td>
                             <td><strong style="color: #fff;" th:text="${p.memberName}">John Doe</strong></td>
-                            <td><strong style="color: #fff; font-size: 15px;" th:text="'$' + ${#numbers.formatDecimal(p.amount, 1, 2)}">$50.00</strong></td>
+                            <td><strong style="color: #fff; font-size: 15px;" th:text="'₹' + ${#numbers.formatDecimal(p.amount, 1, 2)}">₹0.00</strong></td>
                             <td><span class="badge badge-pill" th:text="${p.feeStrategy}">MonthlyFee</span></td>
                             <td style="font-size: 13px; color: var(--text-muted);" th:text="${p.paymentDate}">2026-01-10 10:15</td>
                             <td th:text="${p.paymentMethod}">Credit Card</td>

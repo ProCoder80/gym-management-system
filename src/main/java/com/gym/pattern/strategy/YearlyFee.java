@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 @Component("YearlyFee")
 public class YearlyFee implements FeeStrategy {
 
-    public static final double BASE_FEE = 480.0;
-    public static final double LOCKER_FEE = 120.0;
-    public static final double DIET_PLAN_FEE = 200.0;
-    public static final double PT_SESSION_RATE = 25.0;
+    public static final double BASE_FEE = 14400.0;
+    public static final double LOCKER_FEE = 2400.0;
+    public static final double DIET_PLAN_FEE = 4000.0;
+    public static final double PT_SESSION_RATE = 400.0;
 
     @Override
     public double calculateFee(Membership membership) {
@@ -46,7 +46,7 @@ public class YearlyFee implements FeeStrategy {
 
     @Override
     public String getDescription() {
-        return "Annual commitment: $480/yr (Save 20%). Includes complimentary orientation and priority scheduling.";
+        return "Annual commitment: ₹14,400/yr (Save 20%). Includes complimentary orientation and priority slots.";
     }
 
     @Override

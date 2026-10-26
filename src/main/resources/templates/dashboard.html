@@ -9,7 +9,7 @@
     <!-- Main Content -->
     <main class="main-content">
         <!-- Top bar -->
-        <div th:replace="~{layout/fragments :: topbar('Titan Fitness Command Center', 'Real-time monitoring of members, classes, revenues, and pattern interactions')}"></div>
+        <div th:replace="~{layout/fragments :: topbar('Titan Fitness India Command Center', 'Real-time monitoring of members, classes, revenues, and pattern interactions')}"></div>
 
         <!-- Flash alerts -->
         <div th:replace="~{layout/fragments :: flash-messages}"></div>
@@ -52,7 +52,7 @@
                 <div class="stat-icon-wrap icon-rose">💰</div>
                 <div class="stat-info">
                     <div class="stat-label">Total Revenue</div>
-                    <div class="stat-value" th:text="'$' + ${#numbers.formatDecimal(totalRevenue, 1, 2)}">$0.00</div>
+                    <div class="stat-value" th:text="'₹' + ${#numbers.formatDecimal(totalRevenue, 1, 2)}">₹0.00</div>
                 </div>
             </div>
         </div>
@@ -143,7 +143,7 @@
                         <tbody>
                             <tr th:each="p : ${recentPayments}">
                                 <td th:text="${p.memberName}">Member</td>
-                                <td><strong th:text="'$' + ${#numbers.formatDecimal(p.amount, 1, 2)}">$0.00</strong></td>
+                                <td><strong th:text="'₹' + ${#numbers.formatDecimal(p.amount, 1, 2)}">₹0.00</strong></td>
                                 <td><span class="badge badge-pill" th:text="${p.feeStrategy}">Strategy</span></td>
                                 <td style="font-size: 12px; font-family: monospace;" th:text="${p.receiptId}">REC</td>
                             </tr>

@@ -59,7 +59,7 @@
                         <div style="text-align: right;">
                             <span style="font-size: 13px; color: var(--text-muted);">Total Rate:</span>
                             <div style="font-size: 28px; font-weight: 800; color: var(--accent-orange);" 
-                                 th:text="'$' + ${#numbers.formatDecimal(activeMembership.totalFee, 1, 2)}">$0.00</div>
+                                 th:text="'₹' + ${#numbers.formatDecimal(activeMembership.totalFee, 1, 2)}">₹0.00</div>
                         </div>
                     </div>
 
@@ -115,10 +115,10 @@
                         <div class="form-group" style="margin-bottom: 14px;">
                             <label>Target Plan Tier *</label>
                             <select th:field="*{newPlanType}" class="form-control" required>
-                                <option value="MONTHLY">Monthly ($50.00/mo)</option>
-                                <option value="YEARLY">Yearly ($480.00/yr - 20% Off)</option>
-                                <option value="STUDENT">Student ($35.00/mo)</option>
-                                <option value="COUPLE">Couple ($80.00/mo)</option>
+                                <option value="MONTHLY">Monthly (₹1,500.00/mo)</option>
+                                <option value="YEARLY">Yearly (₹14,400.00/yr - Save 20%)</option>
+                                <option value="STUDENT">Student (₹1,000.00/mo)</option>
+                                <option value="COUPLE">Couple (₹2,500.00/mo)</option>
                             </select>
                         </div>
 
@@ -197,7 +197,7 @@
                         </div>
 
                         <div style="display: flex; gap: 16px; font-size: 13px; color: var(--text-muted); flex-wrap: wrap; margin-bottom: 10px;">
-                            <div>Total Fee: <strong style="color: #fff;" th:text="'$' + ${#numbers.formatDecimal(entry.totalFee, 1, 2)}">$0.00</strong></div>
+                            <div>Total Fee: <strong style="color: #fff;" th:text="'₹' + ${#numbers.formatDecimal(entry.totalFee, 1, 2)}">₹0.00</strong></div>
                             <div>Locker: <strong th:text="${entry.locker ? 'Yes' : 'No'}">No</strong></div>
                             <div>Diet Plan: <strong th:text="${entry.dietPlan ? 'Yes' : 'No'}">No</strong></div>
                             <div>PT Sessions: <strong th:text="${entry.ptSessions}">0</strong></div>

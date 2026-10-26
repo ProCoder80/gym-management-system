@@ -118,8 +118,8 @@ class EnrollmentProcessTest {
         assertEquals("sendWelcome", steps.get(3));
 
         assertTrue(result.isSuccessful());
-        // Verify 5% Loyalty Renewal Discount ($50 standard * 0.95 = $47.50)
-        assertEquals(47.50, result.getMembership().getTotalFee());
+        // Verify 5% Loyalty Renewal Discount (₹1,500 standard * 0.95 = ₹1,425.00)
+        assertEquals(1425.00, result.getMembership().getTotalFee());
         assertTrue(result.getWelcomeMessage().contains("Loyalty Discount"));
 
         verify(gymMediator).notify(eq(renewalEnrollment), eq("MEMBER_RENEWED"), any(Membership.class));

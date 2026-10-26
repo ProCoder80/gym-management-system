@@ -1,6 +1,6 @@
-# Fitness Gym Management System
+# Fitness Gym Management System (India Edition)
 
-A enterprise-grade **Gym Management System** built with **Java 17**, **Spring Boot 3**, **Plain JDBC**, and **SQLite**, specifically developed to demonstrate 5 core Gang of Four (GoF) design patterns with zero ORM overhead.
+An enterprise-grade **Gym Management System** tailored for Indian fitness centers, built with **Java 17**, **Spring Boot 3**, **Plain JDBC**, and **SQLite**, specifically developed to demonstrate 5 core Gang of Four (GoF) design patterns with zero ORM overhead.
 
 ---
 
@@ -31,7 +31,7 @@ This system was engineered around five foundational Design Patterns:
 ### 2. Strategy Pattern (`FeeStrategy`)
 - **Package:** `com.gym.pattern.strategy`
 - **Classes:** `MonthlyFee`, `YearlyFee`, `StudentFee`, `CoupleFee`, resolved via `FeeStrategyFactory`.
-- **Purpose:** Eliminates brittle `switch` and `if-else` pricing ladders. Calculates base rates, duration extensions, and add-on rates (locker $15/mo, diet plan $200, PT sessions $30/session) dynamically.
+- **Purpose:** Eliminates brittle `switch` and `if-else` pricing ladders. Calculates base rates, duration extensions, and add-on rates (locker ₹300/mo, diet plan ₹500, PT sessions ₹500/session) dynamically in Indian Rupees (₹).
 
 ### 3. Template Method Pattern (`EnrollmentProcess`)
 - **Package:** `com.gym.pattern.templatemethod`

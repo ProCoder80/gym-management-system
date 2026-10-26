@@ -39,12 +39,12 @@ function initFeePreview() {
         fetch(url)
             .then(res => res.json())
             .then(data => {
-                document.getElementById('prevBaseFee').innerText = `$${data.baseFee.toFixed(2)}`;
-                document.getElementById('prevLockerFee').innerText = `$${data.lockerFee.toFixed(2)}`;
-                document.getElementById('prevDietFee').innerText = `$${data.dietPlanFee.toFixed(2)}`;
-                document.getElementById('prevPtFee').innerText = `$${data.ptSessionsFee.toFixed(2)}`;
-                document.getElementById('prevDiscount').innerText = `-$${data.discount.toFixed(2)}`;
-                document.getElementById('prevTotalFee').innerText = `$${data.totalFee.toFixed(2)}`;
+                document.getElementById('prevBaseFee').innerText = `₹${data.baseFee.toFixed(2)}`;
+                document.getElementById('prevLockerFee').innerText = `₹${data.lockerFee.toFixed(2)}`;
+                document.getElementById('prevDietFee').innerText = `₹${data.dietPlanFee.toFixed(2)}`;
+                document.getElementById('prevPtFee').innerText = `₹${data.ptSessionsFee.toFixed(2)}`;
+                document.getElementById('prevDiscount').innerText = `-₹${data.discount.toFixed(2)}`;
+                document.getElementById('prevTotalFee').innerText = `₹${data.totalFee.toFixed(2)}`;
                 document.getElementById('prevStrategyName').innerText = data.strategyName;
                 document.getElementById('prevDescription').innerText = data.description;
 

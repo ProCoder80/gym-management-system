@@ -51,13 +51,13 @@ class MemberPlanMementoTest {
     @Test
     @DisplayName("Memento: Originator captures internal state into immutable Memento")
     void testOriginatorSaveToMemento() {
-        MemberPlan plan = new MemberPlan(1L, "MONTHLY", 65.0, true, false, 0, "ACTIVE");
+        MemberPlan plan = new MemberPlan(1L, "MONTHLY", 1800.0, true, false, 0, "ACTIVE");
 
         MemberPlan.Memento snapshot = plan.saveToMemento();
 
         assertNotNull(snapshot);
         assertEquals("MONTHLY", snapshot.getPlanType());
-        assertEquals(65.0, snapshot.getTotalFee());
+        assertEquals(1800.0, snapshot.getTotalFee());
         assertTrue(snapshot.isLocker());
         assertFalse(snapshot.isDietPlan());
         assertEquals(0, snapshot.getPtSessions());
@@ -68,15 +68,15 @@ class MemberPlanMementoTest {
     @Test
     @DisplayName("Memento: Originator successfully restores state from Memento")
     void testOriginatorRestoreFromMemento() {
-        MemberPlan plan = new MemberPlan(1L, "MONTHLY", 65.0, true, false, 0, "ACTIVE");
+        MemberPlan plan = new MemberPlan(1L, "MONTHLY", 1800.0, true, false, 0, "ACTIVE");
 
         // Take snapshot of initial state
         MemberPlan.Memento initialMemento = plan.saveToMemento();
 
         // Mutate originator state via upgrade
-        plan.upgrade("YEARLY", 900.0, true, true, 4);
+        plan.upgrade("YEARLY", 22400.0, true, true, 4);
         assertEquals("YEARLY", plan.getPlanType());
-        assertEquals(900.0, plan.getTotalFee());
+        assertEquals(22400.0, plan.getTotalFee());
         assertTrue(plan.isDietPlan());
         assertEquals(4, plan.getPtSessions());
 
@@ -84,7 +84,7 @@ class MemberPlanMementoTest {
         plan.restoreFromMemento(initialMemento);
 
         assertEquals("MONTHLY", plan.getPlanType());
-        assertEquals(65.0, plan.getTotalFee());
+        assertEquals(1800.0, plan.getTotalFee());
         assertTrue(plan.isLocker());
         assertFalse(plan.isDietPlan());
         assertEquals(0, plan.getPtSessions());
@@ -100,18 +100,18 @@ class MemberPlanMementoTest {
                 .locker(true)
                 .dietPlan(true)
                 .ptSessions(4)
-                .baseFee(480.0)
-                .totalFee(900.0)
+                .baseFee(14400.0)
+                .totalFee(22400.0)
                 .build();
         currentMembership.setId(10L);
 
-        // Previous historical snapshot was MONTHLY, $65, locker=true, dietPlan=false, ptSessions=0
+        // Previous historical snapshot was MONTHLY, ₹1,800, locker=true, dietPlan=false, ptSessions=0
         PlanHistoryEntry previousSnapshot = new PlanHistoryEntry(
                 1L,
                 memberId,
                 "ENROLLMENT",
                 "MONTHLY",
-                65.0,
+                1800.0,
                 true,
                 false,
                 0,
@@ -131,7 +131,7 @@ class MemberPlanMementoTest {
 
         // Verify currentMembership was restored to the previous Memento state
         assertEquals("MONTHLY", currentMembership.getPlanType());
-        assertEquals(65.0, currentMembership.getTotalFee());
+        assertEquals(1800.0, currentMembership.getTotalFee());
         assertTrue(currentMembership.isLocker());
         assertFalse(currentMembership.isDietPlan());
         assertEquals(0, currentMembership.getPtSessions());

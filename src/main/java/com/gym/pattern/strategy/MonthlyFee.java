@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 @Component("MonthlyFee")
 public class MonthlyFee implements FeeStrategy {
 
-    public static final double BASE_FEE = 50.0;
-    public static final double LOCKER_FEE = 15.0;
-    public static final double DIET_PLAN_FEE = 25.0;
-    public static final double PT_SESSION_RATE = 30.0;
+    public static final double BASE_FEE = 1500.0;
+    public static final double LOCKER_FEE = 300.0;
+    public static final double DIET_PLAN_FEE = 500.0;
+    public static final double PT_SESSION_RATE = 500.0;
 
     @Override
     public double calculateFee(Membership membership) {
@@ -46,7 +46,7 @@ public class MonthlyFee implements FeeStrategy {
 
     @Override
     public String getDescription() {
-        return "Standard monthly rate: $50/mo. Flexible, pay-as-you-go membership with full gym access.";
+        return "Standard monthly rate: ₹1,500/mo. Flexible pay-as-you-go membership with full gym access.";
     }
 
     @Override

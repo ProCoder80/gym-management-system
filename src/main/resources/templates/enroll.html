@@ -77,10 +77,10 @@
                         <div class="form-group">
                             <label>Plan Tier (Fee Strategy) *</label>
                             <select id="enrollPlanType" th:field="*{planType}" class="form-control" required>
-                                <option value="MONTHLY">Monthly ($50.00/mo) - Standard</option>
-                                <option value="YEARLY">Yearly ($480.00/yr) - Save 20%</option>
-                                <option value="STUDENT">Student ($35.00/mo) - 30% Off</option>
-                                <option value="COUPLE">Couple ($80.00/mo) - Dual Pass</option>
+                                <option value="MONTHLY">Monthly (₹1,500.00/mo) - Standard</option>
+                                <option value="YEARLY">Yearly (₹14,400.00/yr) - Save 20%</option>
+                                <option value="STUDENT">Student (₹1,000.00/mo) - 30% Off</option>
+                                <option value="COUPLE">Couple (₹2,500.00/mo) - Dual Pass</option>
                             </select>
                         </div>
 
@@ -133,9 +133,10 @@
                         <div class="form-group">
                             <label>Payment Method</label>
                             <select th:field="*{paymentMethod}" class="form-control">
-                                <option value="Credit Card">Credit Card / Debit</option>
-                                <option value="Bank Transfer">Bank Wire Transfer</option>
-                                <option value="Cash / POS">Front Desk POS / Cash</option>
+                                <option value="UPI (Google Pay / PhonePe)">UPI (Google Pay / PhonePe / Paytm)</option>
+                                <option value="Net Banking (NEFT/IMPS)">Net Banking (NEFT / IMPS)</option>
+                                <option value="RuPay / Debit / Credit Card">RuPay / Debit / Credit Card</option>
+                                <option value="Cash / POS">Front Desk Cash / POS</option>
                             </select>
                         </div>
                     </div>
@@ -161,30 +162,30 @@
                     <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
                         <div class="fee-breakdown-row">
                             <span>Base Subscription:</span>
-                            <strong id="prevBaseFee" style="color: #fff;">$50.00</strong>
+                            <strong id="prevBaseFee" style="color: #fff;">₹1,500.00</strong>
                         </div>
                         <div class="fee-breakdown-row">
                             <span>Locker Rental Add-on:</span>
-                            <span id="prevLockerFee">$0.00</span>
+                            <span id="prevLockerFee">₹0.00</span>
                         </div>
                         <div class="fee-breakdown-row">
                             <span>Nutrition & Diet Plan:</span>
-                            <span id="prevDietFee">$0.00</span>
+                            <span id="prevDietFee">₹0.00</span>
                         </div>
                         <div class="fee-breakdown-row">
                             <span>PT Sessions Fee:</span>
-                            <span id="prevPtFee">$0.00</span>
+                            <span id="prevPtFee">₹0.00</span>
                         </div>
                         <div class="fee-breakdown-row" style="color: var(--accent-emerald);">
                             <span>Loyalty / Special Discount:</span>
-                            <span id="prevDiscount">-$0.00</span>
+                            <span id="prevDiscount">-₹0.00</span>
                         </div>
                         <div class="fee-breakdown-row total-row">
                             <div>
                                 <strong style="color: #fff; font-size: 16px;">Total Fee Due:</strong>
-                                <div style="font-size: 11px; color: var(--text-muted);">Tax inclusive</div>
+                                <div style="font-size: 11px; color: var(--text-muted);">Tax inclusive (GST)</div>
                             </div>
-                            <div class="total-amount" id="prevTotalFee">$50.00</div>
+                            <div class="total-amount" id="prevTotalFee">₹1,500.00</div>
                         </div>
                     </div>
 

@@ -58,8 +58,8 @@ public class FeeApiController {
             response.setPlanType(planType);
             response.setStrategyName(strategy.getStrategyName());
             response.setBaseFee(baseFee);
-            response.setLockerFee(locker ? (planType.equalsIgnoreCase("YEARLY") ? 120.0 : (planType.equalsIgnoreCase("COUPLE") ? 25.0 : (planType.equalsIgnoreCase("STUDENT") ? 10.0 : 15.0))) : 0.0);
-            response.setDietPlanFee(dietPlan ? (planType.equalsIgnoreCase("YEARLY") ? 200.0 : (planType.equalsIgnoreCase("COUPLE") ? 40.0 : (planType.equalsIgnoreCase("STUDENT") ? 15.0 : 25.0))) : 0.0);
+            response.setLockerFee(locker ? (planType.equalsIgnoreCase("YEARLY") ? 2400.0 : (planType.equalsIgnoreCase("COUPLE") ? 500.0 : (planType.equalsIgnoreCase("STUDENT") ? 200.0 : 300.0))) : 0.0);
+            response.setDietPlanFee(dietPlan ? (planType.equalsIgnoreCase("YEARLY") ? 4000.0 : (planType.equalsIgnoreCase("COUPLE") ? 800.0 : (planType.equalsIgnoreCase("STUDENT") ? 300.0 : 500.0))) : 0.0);
             response.setPtSessionsFee(ptSessions > 0 ? (subtotal - baseFee - response.getLockerFee() - response.getDietPlanFee()) : 0.0);
             response.setSubtotal(subtotal);
             response.setDiscount(discount);

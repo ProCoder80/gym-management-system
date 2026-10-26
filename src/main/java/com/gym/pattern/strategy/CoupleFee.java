@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 @Component("CoupleFee")
 public class CoupleFee implements FeeStrategy {
 
-    public static final double BASE_FEE = 80.0;
-    public static final double LOCKER_FEE = 25.0;
-    public static final double DIET_PLAN_FEE = 40.0;
-    public static final double PT_SESSION_RATE = 45.0;
+    public static final double BASE_FEE = 2500.0;
+    public static final double LOCKER_FEE = 500.0;
+    public static final double DIET_PLAN_FEE = 800.0;
+    public static final double PT_SESSION_RATE = 800.0;
 
     @Override
     public double calculateFee(Membership membership) {
@@ -46,7 +46,7 @@ public class CoupleFee implements FeeStrategy {
 
     @Override
     public String getDescription() {
-        return "Couple & Partner: $80/mo. All-inclusive access for pairs with joint training perks.";
+        return "Couple & Partner: ₹2,500/mo. All-inclusive access for pairs with joint nutrition & workout perks.";
     }
 
     @Override

@@ -166,11 +166,11 @@ public class DBInitializer implements CommandLineRunner {
         String insertMember = "INSERT INTO members (name, email, phone, status, join_date) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(insertMember)) {
             String[][] members = {
-                {"John Doe", "john.doe@example.com", "+1-555-0101", "ACTIVE", "2026-01-10"},
-                {"Sarah Jenkins", "sarah.j@example.com", "+1-555-0102", "ACTIVE", "2026-02-15"},
-                {"Michael Chang", "mchang@example.com", "+1-555-0103", "ACTIVE", "2026-03-01"},
-                {"Emma Watson", "emma.w@example.com", "+1-555-0104", "ACTIVE", "2026-04-12"},
-                {"David Rodriguez", "david.r@example.com", "+1-555-0105", "ACTIVE", "2026-05-20"}
+                {"Aarav Sharma", "aarav.sharma@example.in", "+91-98765-43210", "ACTIVE", "2026-01-10"},
+                {"Ananya Iyer", "ananya.iyer@example.in", "+91-98765-43211", "ACTIVE", "2026-02-15"},
+                {"Rohan Verma", "rohan.verma@example.in", "+91-98765-43212", "ACTIVE", "2026-03-01"},
+                {"Pooja Patel", "pooja.patel@example.in", "+91-98765-43213", "ACTIVE", "2026-04-12"},
+                {"Vikram Malhotra", "vikram.m@example.in", "+91-98765-43214", "ACTIVE", "2026-05-20"}
             };
             for (String[] m : members) {
                 ps.setString(1, m[0]);
@@ -186,9 +186,9 @@ public class DBInitializer implements CommandLineRunner {
         String insertTrainer = "INSERT INTO trainers (name, specialization, available, contact) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(insertTrainer)) {
             Object[][] trainers = {
-                {"Alex Turner", "Strength & Conditioning", 1, "+1-555-0201"},
-                {"Maya Patel", "Yoga & Mobility", 1, "+1-555-0202"},
-                {"Marcus Brody", "HIIT & Functional Training", 1, "+1-555-0203"}
+                {"Arjun Kapoor", "Strength & Conditioning", 1, "+91-98111-22331"},
+                {"Maya Patel", "Yoga & Mobility", 1, "+91-98111-22332"},
+                {"Kabir Singh", "HIIT & Functional Fitness", 1, "+91-98111-22333"}
             };
             for (Object[] t : trainers) {
                 ps.setString(1, (String) t[0]);
@@ -205,8 +205,8 @@ public class DBInitializer implements CommandLineRunner {
         try (PreparedStatement ps = conn.prepareStatement(insertClass)) {
             Object[][] classes = {
                 {"Sunrise Yoga Flow", "Invigorating morning vinyasa flow focusing on flexibility, balance, and mindful breathing.", 2L, "Mon/Wed/Fri 07:00 AM", 15, 12},
-                {"Iron Powerlifting", "Heavy barbell mechanics, deadlift, squat, and bench press mastery with coach supervision.", 1L, "Tue/Thu 06:00 PM", 10, 8},
-                {"High-Octane HIIT", "High-intensity interval circuits designed for metabolic conditioning and raw stamina.", 3L, "Mon/Wed 05:30 PM", 12, 12},
+                {"Desi Akhada Powerlifting", "Heavy barbell mechanics, deadlift, squat, and bench press mastery with coach supervision.", 1L, "Tue/Thu 06:00 PM", 10, 8},
+                {"High-Octane HIIT Circuit", "High-intensity interval circuits designed for metabolic conditioning and raw stamina.", 3L, "Mon/Wed 05:30 PM", 12, 12},
                 {"Core & Cardio Blast", "Dynamic core stability and cardiovascular conditioning drills for all fitness levels.", 1L, "Sat 09:00 AM", 20, 14}
             };
             for (Object[] c : classes) {
@@ -227,11 +227,11 @@ public class DBInitializer implements CommandLineRunner {
             ps.setLong(1, 1L);
             ps.setString(2, "MONTHLY");
             ps.setString(3, "MonthlyFee");
-            ps.setDouble(4, 50.0);
-            ps.setDouble(5, 125.0); // 50 + 15 (locker) + 60 (2*30 PT)
+            ps.setDouble(4, 1500.0);
+            ps.setDouble(5, 2800.0); // 1500 + 300 (locker) + 1000 (2*500 PT)
             ps.setString(6, "2026-01-10");
             ps.setString(7, "2026-02-10");
-            ps.setLong(8, 1L); // Trainer Alex
+            ps.setLong(8, 1L); // Trainer Arjun
             ps.setInt(9, 1);
             ps.setInt(10, 0);
             ps.setInt(11, 2);
@@ -242,8 +242,8 @@ public class DBInitializer implements CommandLineRunner {
             ps.setLong(1, 2L);
             ps.setString(2, "YEARLY");
             ps.setString(3, "YearlyFee");
-            ps.setDouble(4, 480.0);
-            ps.setDouble(5, 680.0); // 480 + 200 (diet)
+            ps.setDouble(4, 14400.0);
+            ps.setDouble(5, 18400.0); // 14400 + 4000 (diet)
             ps.setString(6, "2026-02-15");
             ps.setString(7, "2027-02-15");
             ps.setLong(8, 2L); // Trainer Maya
@@ -257,8 +257,8 @@ public class DBInitializer implements CommandLineRunner {
             ps.setLong(1, 3L);
             ps.setString(2, "STUDENT");
             ps.setString(3, "StudentFee");
-            ps.setDouble(4, 35.0);
-            ps.setDouble(5, 45.0); // 35 + 10 (locker)
+            ps.setDouble(4, 1000.0);
+            ps.setDouble(5, 1200.0); // 1000 + 200 (locker)
             ps.setString(6, "2026-03-01");
             ps.setString(7, "2026-04-01");
             ps.setNull(8, java.sql.Types.BIGINT);
@@ -274,30 +274,30 @@ public class DBInitializer implements CommandLineRunner {
         try (PreparedStatement ps = conn.prepareStatement(insertPayment)) {
             ps.setLong(1, 1L);
             ps.setLong(2, 1L);
-            ps.setDouble(3, 125.0);
+            ps.setDouble(3, 2800.0);
             ps.setString(4, "MonthlyFee");
             ps.setString(5, "2026-01-10T10:15:00");
-            ps.setString(6, "Credit Card");
+            ps.setString(6, "UPI (Google Pay)");
             ps.setString(7, "REC-INIT001");
             ps.setString(8, "COMPLETED");
             ps.executeUpdate();
 
             ps.setLong(1, 2L);
             ps.setLong(2, 2L);
-            ps.setDouble(3, 680.0);
+            ps.setDouble(3, 18400.0);
             ps.setString(4, "YearlyFee");
             ps.setString(5, "2026-02-15T14:30:00");
-            ps.setString(6, "Bank Transfer");
+            ps.setString(6, "Net Banking (NEFT/IMPS)");
             ps.setString(7, "REC-INIT002");
             ps.setString(8, "COMPLETED");
             ps.executeUpdate();
 
             ps.setLong(1, 3L);
             ps.setLong(2, 3L);
-            ps.setDouble(3, 45.0);
+            ps.setDouble(3, 1200.0);
             ps.setString(4, "StudentFee");
             ps.setString(5, "2026-03-01T09:45:00");
-            ps.setString(6, "Debit Card");
+            ps.setString(6, "RuPay Debit Card");
             ps.setString(7, "REC-INIT003");
             ps.setString(8, "COMPLETED");
             ps.executeUpdate();
@@ -309,24 +309,24 @@ public class DBInitializer implements CommandLineRunner {
             ps.setLong(1, 1L);
             ps.setString(2, "ENROLLMENT");
             ps.setString(3, "MONTHLY");
-            ps.setDouble(4, 125.0);
+            ps.setDouble(4, 2800.0);
             ps.setInt(5, 1);
             ps.setInt(6, 0);
             ps.setInt(7, 2);
             ps.setString(8, "ACTIVE");
-            ps.setString(9, "{\"planType\":\"MONTHLY\",\"totalFee\":125.0,\"locker\":true,\"dietPlan\":false,\"ptSessions\":2,\"status\":\"ACTIVE\"}");
+            ps.setString(9, "{\"planType\":\"MONTHLY\",\"totalFee\":2800.0,\"locker\":true,\"dietPlan\":false,\"ptSessions\":2,\"status\":\"ACTIVE\"}");
             ps.setString(10, "2026-01-10T10:15:00");
             ps.executeUpdate();
 
             ps.setLong(1, 2L);
             ps.setString(2, "ENROLLMENT");
             ps.setString(3, "YEARLY");
-            ps.setDouble(4, 680.0);
+            ps.setDouble(4, 18400.0);
             ps.setInt(5, 0);
             ps.setInt(6, 1);
             ps.setInt(7, 0);
             ps.setString(8, "ACTIVE");
-            ps.setString(9, "{\"planType\":\"YEARLY\",\"totalFee\":680.0,\"locker\":false,\"dietPlan\":true,\"ptSessions\":0,\"status\":\"ACTIVE\"}");
+            ps.setString(9, "{\"planType\":\"YEARLY\",\"totalFee\":18400.0,\"locker\":false,\"dietPlan\":true,\"ptSessions\":0,\"status\":\"ACTIVE\"}");
             ps.setString(10, "2026-02-15T14:30:00");
             ps.executeUpdate();
         }
