@@ -152,8 +152,11 @@ public class RenewalEnrollment extends EnrollmentProcess {
 
     @Override
     protected void sendWelcome(EnrollmentContext context) {
-        String msg = String.format("💪 Welcome back to the grind, %s! Your %s membership has been renewed with our 5%% Loyalty Discount. Keep crushing your fitness goals!",
-                context.getMember().getName(), context.getMembership().getPlanType());
+        String templateNote = (context.getTemplateName() != null && !context.getTemplateName().trim().isEmpty())
+                ? " (" + context.getTemplateName() + " Template)"
+                : "";
+        String msg = String.format("💪 Welcome back to the grind, %s! Your %s membership%s has been renewed with our 5%% Loyalty Discount. Keep crushing your fitness goals!",
+                context.getMember().getName(), context.getMembership().getPlanType(), templateNote);
         context.setWelcomeMessage(msg);
         logger.info(msg);
     }

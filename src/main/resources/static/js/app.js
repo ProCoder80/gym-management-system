@@ -55,7 +55,60 @@ function initFeePreview() {
             .catch(err => console.error('Error fetching live fee preview:', err));
     };
 
-    planSelect.addEventListener('change', updatePreview);
+    const templateSelect = document.getElementById('templateSelector');
+    const templateTitle = document.getElementById('templateTitle');
+    const templatePerks = document.getElementById('templatePerks');
+
+    const onTemplateChange = () => {
+        if (!templateSelect) return;
+        const selectedTemplate = templateSelect.value || 'BASIC';
+
+        fetch(`/api/prototype/${encodeURIComponent(selectedTemplate)}`)
+            .then(res => res.json())
+            .then(data => {
+                // Prepopulate form fields with cloned prototype defaults
+                if (planSelect && data.planType) {
+                    planSelect.value = data.planType;
+                }
+                if (lockerCheckbox) {
+                    lockerCheckbox.checked = !!data.locker;
+                }
+                if (dietCheckbox) {
+                    dietCheckbox.checked = !!data.dietPlan;
+                }
+                if (ptInput) {
+                    ptInput.value = data.ptSessions || 0;
+                }
+                if (templateTitle) {
+                    templateTitle.innerText = `📋 Cloned from Prototype: ${data.templateName} Template`;
+                }
+                if (templatePerks && data.features) {
+                    templatePerks.innerText = data.features.join(' • ');
+                }
+
+                // Trigger live fee preview with new template defaults
+                updatePreview();
+            })
+            .catch(err => {
+                console.error('Error fetching prototype template clone:', err);
+                updatePreview();
+            });
+    };
+
+    if (templateSelect) {
+        templateSelect.addEventListener('change', onTemplateChange);
+    }
+
+    planSelect.addEventListener('change', () => {
+        if (templateSelect) {
+            const planVal = planSelect.value;
+            if (planVal === 'MONTHLY') templateSelect.value = 'BASIC';
+            else if (planVal === 'YEARLY') templateSelect.value = 'PREMIUM';
+            else if (planVal === 'STUDENT') templateSelect.value = 'STUDENT';
+            else if (planVal === 'COUPLE') templateSelect.value = 'COUPLE';
+        }
+        updatePreview();
+    });
     if (lockerCheckbox) lockerCheckbox.addEventListener('change', updatePreview);
     if (dietCheckbox) dietCheckbox.addEventListener('change', updatePreview);
     if (ptInput) {

@@ -3,6 +3,7 @@ package com.gym.model.dto;
 import java.time.LocalDate;
 
 public class EnrollmentForm {
+    private String templateType = "BASIC";
     private Long memberId;
     private String planType = "MONTHLY";
     private String strategyName = "MonthlyFee";
@@ -15,6 +16,14 @@ public class EnrollmentForm {
     private String paymentMethod = "Credit Card";
 
     public EnrollmentForm() {
+    }
+
+    public String getTemplateType() {
+        return templateType;
+    }
+
+    public void setTemplateType(String templateType) {
+        this.templateType = templateType;
     }
 
     public Long getMemberId() {

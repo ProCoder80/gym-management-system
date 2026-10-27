@@ -19,9 +19,10 @@
             <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
                 <span style="font-size: 24px;">⚙️</span>
                 <div>
-                    <strong style="color: #fff;">Pattern Workflow Trigger:</strong>
+                    <strong style="color: #fff;">Pattern Workflow Trigger (6 GoF Patterns):</strong>
                     <span style="color: var(--text-muted); font-size: 13.5px;">
-                        Submitting this form triggers <strong>EnrollmentProcess.run()</strong> (Template Method), calculates pricing via 
+                        Selecting a plan template clones predefined defaults from <strong>MembershipPrototypeRegistry</strong> (Prototype Pattern).
+                        Submitting triggers <strong>EnrollmentProcess.run()</strong> (Template Method), calculates pricing via 
                         <strong>FeeStrategy</strong> (Strategy Pattern), constructs the entity via <strong>Membership.Builder</strong> (Builder Pattern), 
                         and dispatches to <strong>GymMediator</strong> to assign trainers and auto-enroll intro classes!
                     </span>
@@ -49,6 +50,28 @@
                                     th:value="${m.id}" 
                                     th:text="'#' + ${m.id} + ' - ' + ${m.name} + ' (' + ${m.email} + ')'"></option>
                         </select>
+                    </div>
+
+                    <!-- Membership Plan Template Selection (Prototype Pattern) -->
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <label style="margin-bottom: 0;">📋 Membership Plan Template (Prototype Pattern) *</label>
+                            <span class="badge badge-pill" style="font-size: 11px;">PROTOTYPE PATTERN</span>
+                        </div>
+                        <select id="templateSelector" th:field="*{templateType}" class="form-control" style="font-weight: 600;">
+                            <option value="BASIC">Basic Template - Standard Monthly (₹1,500/mo &bull; Flexible Add-ons)</option>
+                            <option value="PREMIUM">Premium Template - All-Inclusive Annual (₹14,400/yr &bull; Locker + Diet + 5 PT Sessions)</option>
+                            <option value="STUDENT">Student Template - 30% Subsidized (₹1,000/mo &bull; Full Floor Access)</option>
+                            <option value="COUPLE">Couple Template - Dual Pass (₹2,500/mo &bull; Dual Lockers + Diet + 2 PT Sessions)</option>
+                        </select>
+                        <div id="templatePerksBox" style="margin-top: 8px; padding: 10px 14px; background: rgba(255, 87, 34, 0.05); border: 1px solid rgba(255, 87, 34, 0.2); border-radius: var(--radius-sm); font-size: 12.5px;">
+                            <div style="color: #fff; font-weight: 600; margin-bottom: 4px;" id="templateTitle">
+                                📋 Cloned from Prototype: Basic Template
+                            </div>
+                            <div style="color: var(--text-muted); font-size: 12px;" id="templatePerks">
+                                Standard monthly fitness access. Prepopulates form with default parameters. Modify any field below!
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Enrollment Type (New vs Renewal) -->
@@ -190,7 +213,7 @@
                     </div>
 
                     <div style="margin-top: 14px; padding: 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); font-size: 12px; color: var(--text-subtle);">
-                        ℹ️ <strong>Strategy Pattern:</strong> Resolved via <code>FeeStrategyFactory</code> map lookup without conditional branching.
+                        ℹ️ <strong>Prototype &amp; Strategy Patterns:</strong> Prepopulated from <code>MembershipPrototypeRegistry</code> clone; dynamic live pricing evaluated via <code>FeeStrategyFactory</code> map lookup.
                     </div>
                 </div>
             </div>

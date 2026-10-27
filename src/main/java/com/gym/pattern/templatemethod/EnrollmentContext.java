@@ -22,6 +22,7 @@ public class EnrollmentContext {
     private boolean successful = false;
     private String statusMessage;
     private String welcomeMessage;
+    private String templateName;
 
     public EnrollmentContext() {
     }
@@ -102,5 +103,13 @@ public class EnrollmentContext {
 
     public void setWelcomeMessage(String welcomeMessage) {
         this.welcomeMessage = welcomeMessage;
+    }
+
+    public String getTemplateName() {
+        return templateName;
+    }
+
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
     }
 }

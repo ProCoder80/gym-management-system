@@ -105,9 +105,12 @@ public class NewEnrollment extends EnrollmentProcess {
 
     @Override
     protected void sendWelcome(EnrollmentContext context) {
-        String msg = String.format("🎉 Welcome to the Gym Family, %s! Your %s membership has been successfully activated. " +
+        String templateNote = (context.getTemplateName() != null && !context.getTemplateName().trim().isEmpty())
+                ? " (Template: " + context.getTemplateName() + ")"
+                : "";
+        String msg = String.format("🎉 Welcome to the Gym Family, %s! Your %s membership%s has been successfully activated. " +
                         "A trainer has been assigned and you are registered for your introductory class session.",
-                context.getMember().getName(), context.getMembership().getPlanType());
+                context.getMember().getName(), context.getMembership().getPlanType(), templateNote);
         context.setWelcomeMessage(msg);
         logger.info(msg);
     }

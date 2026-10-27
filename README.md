@@ -1,12 +1,12 @@
 # Fitness Gym Management System (India Edition)
 
-An enterprise-grade **Gym Management System** tailored for Indian fitness centers, built with **Java 17**, **Spring Boot 3**, **Plain JDBC**, and **SQLite**, specifically developed to demonstrate 5 core Gang of Four (GoF) design patterns with zero ORM overhead.
+An enterprise-grade **Gym Management System** tailored for Indian fitness centers, built with **Java 17**, **Spring Boot 3**, **Plain JDBC**, and **SQLite**, specifically developed to demonstrate 6 core Gang of Four (GoF) design patterns with zero ORM overhead.
 
 ---
 
 ## 🎯 Architectural Design Patterns
 
-This system was engineered around five foundational Design Patterns:
+This system was engineered around six foundational Design Patterns:
 
 ```
 +-----------------------------------------------------------------------------------+
@@ -17,6 +17,7 @@ This system was engineered around five foundational Design Patterns:
 | 3. Template Method        | EnrollmentProcess (NewEnrollment, RenewalEnrollment) |
 | 4. Mediator Pattern       | GymCoordinator (MemberService, TrainerService, Class) |
 | 5. Memento Pattern        | MemberPlan.Memento & PlanManagementService (Undo/Redo)|
+| 6. Prototype Pattern      | MembershipPrototypeRegistry (Deep Cloned Templates)  |
 +-----------------------------------------------------------------------------------+
 ```
 
@@ -56,6 +57,11 @@ This system was engineered around five foundational Design Patterns:
 - **Package:** `com.gym.pattern.memento`
 - **Classes:** `MemberPlan` (Originator), `MemberPlan.Memento` (State Snapshot), `PlanManagementService` (Caretaker).
 - **Purpose:** Preserves historical plan snapshots in SQLite table `plan_history`. Enables instant rollback (`undoPlanChange()`) with zero internal encapsulation leakage.
+
+### 6. Prototype Pattern (`MembershipPrototype`)
+- **Package:** `com.gym.model.prototype` & `com.gym.pattern.prototype`
+- **Classes:** `MembershipPrototype`, `BasicMembershipPrototype`, `PremiumMembershipPrototype`, `StudentMembershipPrototype`, `CoupleMembershipPrototype`, `MembershipPrototypeRegistry`.
+- **Purpose:** Manages predefined membership plan templates stored in an in-memory Map registry. Clients retrieve templates and obtain independent, deep-copied clones before customization, ensuring that modifying a clone never pollutes master templates or other clones. Member-specific data (`memberId`, `startDate`, `trainerId`) and nested collections (`features`, `attributes`) maintain strict isolation.
 
 ---
 
@@ -143,7 +149,7 @@ Once started, open your browser and navigate to:
 
 ## 🧪 Running Automated Tests
 
-All 25 unit and pattern verification tests run seamlessly via JUnit 5:
+All 37 unit and pattern verification tests run seamlessly via JUnit 5:
 ```powershell
 .\mvnw.cmd test
 ```
@@ -155,7 +161,9 @@ All 25 unit and pattern verification tests run seamlessly via JUnit 5:
 | `EnrollmentProcessTest` | Template Method | 3 | ✅ Passed |
 | `GymMediatorTest` | Mediator Pattern | 5 | ✅ Passed |
 | `MemberPlanMementoTest` | Memento Pattern | 4 | ✅ Passed |
-| **Total** | | **25 / 25** | **100% Green** |
+| `MembershipPrototypeTest` | Prototype Pattern | 11 | ✅ Passed |
+| `EnrollmentServicePrototypeIntegrationTest` | Prototype Integration | 1 | ✅ Passed |
+| **Total** | | **37 / 37** | **100% Green** |
 
 ---
 
